@@ -102,6 +102,11 @@ fetch(url)
     document.getElementById("desc").textContent = "Virhe haettaessa säätä";
     console.error(err);
   });
+  
+  // Päivittää koko sivun 5 minuutin välein (300000 ms)
+  setTimeout(() => {
+    location.reload();
+  }, 300000);
 </script>
 
 </body>
