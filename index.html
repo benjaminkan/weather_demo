@@ -5,32 +5,60 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Sää – Vantaa</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    color: #222;
-    background: #fff;
+  /* Täyttää koko näytön */
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to bottom, #4a90e2, #50e3c2); /* sinivihreä tausta */
+    color: #fff;
+    font-family: 'Arial Black', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .weather-container {
     text-align: center;
-    padding: 20px;
+    background: rgba(0, 0, 0, 0.4); /* hieman läpinäkyvä tumma tausta tekstille */
+    padding: 40px 60px;
+    border-radius: 20px;
   }
-  .weather {
-    margin-top: 30px;
-    font-size: 1.4rem;
+
+  h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
   }
+
   .temp {
-    font-size: 3rem;
+    font-size: 10rem;
     font-weight: bold;
+    margin: 20px 0;
   }
+
   .desc {
-    font-size: 1.2rem;
-    margin-top: 8px;
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+
+  #time {
+    font-size: 2rem;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 1200px) {
+    .temp { font-size: 7rem; }
+    h1 { font-size: 3rem; }
+    .desc { font-size: 2rem; }
+    #time { font-size: 1.5rem; }
   }
 </style>
 </head>
 <body>
 
-<h1>Sää – Vantaa</h1>
-
-<div class="weather">
+<div class="weather-container">
+  <h1>Sää – Vantaa</h1>
   <div class="temp" id="temp">…</div>
   <div class="desc" id="desc">Ladataan säätietoja…</div>
   <div id="time"></div>
