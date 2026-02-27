@@ -4,111 +4,108 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Sää – Vantaa</title>
+
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    font-family: 'Arial Black', Arial, sans-serif;
-    color: #fff;
-  }
-  
-  body {
-	position: relative;
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	transition: background-image 1s ease-in-out;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Arial Black', Arial, sans-serif;
+  color: #fff;
+  overflow: hidden;
 }
 
-  h1 {
-    text-align: center;
-    font-size: 4rem;
-    margin: 40px 0;
-  }
+body {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 1s ease-in-out;
 
-  .weather-grid {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    gap: 40px;
-    padding: 0 60px 60px 60px;
-  }
-
-  .weather-card {
-    flex: 1;
-    background: rgba(0,0,0,0.4);
-    border-radius: 25px;
-    padding: 40px;
-    text-align: center;
-  }
-
-  .day-title {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-  }
-
-  .icon {
-    font-size: 5rem;
-    margin-bottom: 10px;
-  }
-
-  .temp-current {
-    font-size: 6rem;
-    margin: 10px 0;
-  }
-
-  .temp-range {
-    font-size: 2.5rem;
-    margin-top: 10px;
-  }
-
-  .desc {
-    font-size: 2rem;
-    margin-top: 10px;
-  }
-
-  #time {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-top: 20px;
-    opacity: 0.9;
-  }
-
-  @media (max-width: 1400px) {
-    .temp-current { font-size: 4.5rem; }
-    .icon { font-size: 4rem; }
-  }
-  
-
-
-/* Taustat säätyypeittäin */
-.sunny {
-  background-image: url("images/sunny.jpg");
+  /* 🔥 TÄRKEÄ: Keskitys */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.cloudy {
-  background-image: url("images/cloudy.jpg");
+/* ===== SISÄLTÖ WRAPPER ===== */
+.app-wrapper {
+  width: 100%;
+  max-width: 1800px;
+  padding: 40px 60px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
-.fog {
-  background-image: url("images/fog.jpg");
+/* ===== OTSIKKO ===== */
+h1 {
+  font-size: 4rem;
+  margin: 0 0 40px 0;
 }
 
-.rain {
-  background-image: url("images/rain.jpg");
+/* ===== GRID ===== */
+.weather-grid {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 40px;
 }
 
-.snow {
-  background-image: url("images/snow.jpg");
+.weather-card {
+  flex: 1;
+  background: rgba(0,0,0,0.4);
+  border-radius: 25px;
+  padding: 40px;
+  text-align: center;
 }
 
-.thunder {
-  background-image: url("images/thunder.jpg");
+.day-title {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
 }
 
-/* Tumma overlay */
+.icon {
+  font-size: 5rem;
+  margin-bottom: 10px;
+}
+
+.temp-current {
+  font-size: 6rem;
+  margin: 10px 0;
+}
+
+.temp-range {
+  font-size: 2.5rem;
+  margin-top: 10px;
+}
+
+.desc {
+  font-size: 2rem;
+  margin-top: 10px;
+}
+
+#time {
+  font-size: 1.8rem;
+  margin-top: 40px;
+  opacity: 0.9;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1400px) {
+  .temp-current { font-size: 4.5rem; }
+  .icon { font-size: 4rem; }
+}
+
+/* ===== TAUSTAT ===== */
+.sunny { background-image: url("images/sunny.jpg"); }
+.cloudy { background-image: url("images/cloudy.jpg"); }
+.fog { background-image: url("images/fog.jpg"); }
+.rain { background-image: url("images/rain.jpg"); }
+.snow { background-image: url("images/snow.jpg"); }
+.thunder { background-image: url("images/thunder.jpg"); }
+
+/* Overlay */
 body::before {
   content: "";
   position: fixed;
@@ -118,46 +115,45 @@ body::before {
   pointer-events: none;
 }
 
-/* Nosta kaikki sisältö overlayn päälle */
 body > * {
-  position: relative;
-  z-index: 1;
-}
-
-.weather-container {
   position: relative;
   z-index: 1;
 }
 </style>
 </head>
+
 <body>
 
-<h1>Sää – Vantaa</h1>
+<div class="app-wrapper">
 
-<div class="weather-grid">
-  <div class="weather-card">
-    <div class="day-title">Tänään</div>
-    <div class="icon" id="icon0">☀️</div>
-    <div class="temp-current" id="temp0">–</div>
-    <div class="desc" id="desc0"></div>
+  <h1>Sää – Vantaa</h1>
+
+  <div class="weather-grid">
+    <div class="weather-card">
+      <div class="day-title">Tänään</div>
+      <div class="icon" id="icon0">☀️</div>
+      <div class="temp-current" id="temp0">–</div>
+      <div class="desc" id="desc0"></div>
+    </div>
+
+    <div class="weather-card">
+      <div class="day-title">Huomenna</div>
+      <div class="icon" id="icon1">☀️</div>
+      <div class="temp-range" id="temp1">–</div>
+      <div class="desc" id="desc1"></div>
+    </div>
+
+    <div class="weather-card">
+      <div class="day-title">Ylihuomenna</div>
+      <div class="icon" id="icon2">☀️</div>
+      <div class="temp-range" id="temp2">–</div>
+      <div class="desc" id="desc2"></div>
+    </div>
   </div>
 
-  <div class="weather-card">
-    <div class="day-title">Huomenna</div>
-    <div class="icon" id="icon1">☀️</div>
-    <div class="temp-range" id="temp1">–</div>
-    <div class="desc" id="desc1"></div>
-  </div>
+  <div id="time"></div>
 
-  <div class="weather-card">
-    <div class="day-title">Ylihuomenna</div>
-    <div class="icon" id="icon2">☀️</div>
-    <div class="temp-range" id="temp2">–</div>
-    <div class="desc" id="desc2"></div>
-  </div>
 </div>
-
-<div id="time"></div>
 
 <script>
 const lat = 60.2934;
@@ -165,28 +161,14 @@ const lon = 25.0378;
 
 const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe/Helsinki`;
 
-/*
-  Palauttaa:
-  [kuvaus, ikoni, taustaluokka]
-*/
 function getWeatherInfo(code) {
 
   if (code === 0) return ["Selkeää","☀️","sunny"];
-
-  if (code >= 1 && code <= 3)
-    return ["Pilvistä","⛅","cloudy"];
-
-  if (code >= 45 && code <= 48)
-    return ["Sumua","🌫️","fog"];
-
-  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82))
-    return ["Sade","🌧️","rain"];
-
-  if (code >= 71 && code <= 77)
-    return ["Lunta","🌨️","snow"];
-
-  if (code >= 95)
-    return ["Ukkosta","⛈️","thunder"];
+  if (code >= 1 && code <= 3) return ["Pilvistä","⛅","cloudy"];
+  if (code >= 45 && code <= 48) return ["Sumua","🌫️","fog"];
+  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return ["Sade","🌧️","rain"];
+  if (code >= 71 && code <= 77) return ["Lunta","🌨️","snow"];
+  if (code >= 95) return ["Ukkosta","⛈️","thunder"];
 
   return ["Ei tietoa","❓","cloudy"];
 }
@@ -196,7 +178,6 @@ function updateWeather() {
     .then(r => r.json())
     .then(data => {
 
-      // ===== NYKYINEN SÄÄ =====
       const current = data.current_weather;
       const todayInfo = getWeatherInfo(current.weathercode);
 
@@ -205,11 +186,9 @@ function updateWeather() {
         current.temperature.toFixed(1) + " °C";
       document.getElementById("desc0").textContent = todayInfo[0];
 
-      // Taustan vaihto (perustuu nykyiseen säähän)
       document.body.className = "";
       document.body.classList.add(todayInfo[2]);
 
-      // ===== ENNUSTE (2 seuraavaa päivää) =====
       for (let i = 1; i <= 2; i++) {
 
         const code = data.daily.weathercode[i];
@@ -234,7 +213,7 @@ function updateWeather() {
 }
 
 updateWeather();
-setInterval(updateWeather, 300000); // Päivitys 5 min välein
+setInterval(updateWeather, 300000);
 </script>
 
 </body>
