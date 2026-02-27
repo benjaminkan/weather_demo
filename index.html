@@ -10,118 +10,231 @@
     padding: 0;
     height: 100%;
     width: 100%;
-    background: linear-gradient(to bottom, #4a90e2, #50e3c2);
     font-family: 'Arial Black', Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    color: #fff;
   }
-
-  .weather-container {
-    text-align: center;
-    background: rgba(0,0,0,0.4);
-    padding: 50px 80px;
-    border-radius: 25px;
-  }
+  
+  body {
+	position: relative;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	transition: background-image 1s ease-in-out;
+}
 
   h1 {
+    text-align: center;
     font-size: 4rem;
-    margin-bottom: 20px;
-    color: #fff;
+    margin: 40px 0;
   }
 
-  .temp {
-    font-size: 10rem;
-    font-weight: bold;
-    margin: 20px 0;
-    color: #fff;
+  .weather-grid {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 40px;
+    padding: 0 60px 60px 60px;
+  }
+
+  .weather-card {
+    flex: 1;
+    background: rgba(0,0,0,0.4);
+    border-radius: 25px;
+    padding: 40px;
+    text-align: center;
+  }
+
+  .day-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
   }
 
   .icon {
-    font-size: 6rem;
+    font-size: 5rem;
     margin-bottom: 10px;
   }
 
+  .temp-current {
+    font-size: 6rem;
+    margin: 10px 0;
+  }
+
+  .temp-range {
+    font-size: 2.5rem;
+    margin-top: 10px;
+  }
+
   .desc {
-    font-size: 3rem;
-    margin-bottom: 15px;
-    color: #fff;
+    font-size: 2rem;
+    margin-top: 10px;
   }
 
   #time {
-    font-size: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+    margin-top: 20px;
     opacity: 0.9;
-    color: #fff;
   }
 
-  @media (max-width: 1200px) {
-    .temp { font-size: 7rem; }
-    h1 { font-size: 3rem; }
+  @media (max-width: 1400px) {
+    .temp-current { font-size: 4.5rem; }
     .icon { font-size: 4rem; }
-    .desc { font-size: 2rem; }
-    #time { font-size: 1.5rem; }
   }
+  
+
+
+/* Taustat säätyypeittäin */
+.sunny {
+  background-image: url("images/sunny.jpg");
+}
+
+.cloudy {
+  background-image: url("images/cloudy.jpg");
+}
+
+.fog {
+  background-image: url("images/fog.jpg");
+}
+
+.rain {
+  background-image: url("images/rain.jpg");
+}
+
+.snow {
+  background-image: url("images/snow.jpg");
+}
+
+.thunder {
+  background-image: url("images/thunder.jpg");
+}
+
+/* Tumma overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Nosta kaikki sisältö overlayn päälle */
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+.weather-container {
+  position: relative;
+  z-index: 1;
+}
 </style>
 </head>
 <body>
 
-<div class="weather-container">
-  <h1>Sää – Vantaa</h1>
-  <div class="icon" id="icon">☀️</div>
-  <div class="temp" id="temp">…</div>
-  <div class="desc" id="desc">Ladataan säätietoja…</div>
-  <div id="time"></div>
+<h1>Sää – Vantaa</h1>
+
+<div class="weather-grid">
+  <div class="weather-card">
+    <div class="day-title">Tänään</div>
+    <div class="icon" id="icon0">☀️</div>
+    <div class="temp-current" id="temp0">–</div>
+    <div class="desc" id="desc0"></div>
+  </div>
+
+  <div class="weather-card">
+    <div class="day-title">Huomenna</div>
+    <div class="icon" id="icon1">☀️</div>
+    <div class="temp-range" id="temp1">–</div>
+    <div class="desc" id="desc1"></div>
+  </div>
+
+  <div class="weather-card">
+    <div class="day-title">Ylihuomenna</div>
+    <div class="icon" id="icon2">☀️</div>
+    <div class="temp-range" id="temp2">–</div>
+    <div class="desc" id="desc2"></div>
+  </div>
 </div>
 
+<div id="time"></div>
+
 <script>
-// Koordinaatit: Vantaa
 const lat = 60.2934;
 const lon = 25.0378;
-const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=Europe/Helsinki`;
 
-// Päivitä säätiedot
+const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe/Helsinki`;
+
+/*
+  Palauttaa:
+  [kuvaus, ikoni, taustaluokka]
+*/
+function getWeatherInfo(code) {
+
+  if (code === 0) return ["Selkeää","☀️","sunny"];
+
+  if (code >= 1 && code <= 3)
+    return ["Pilvistä","⛅","cloudy"];
+
+  if (code >= 45 && code <= 48)
+    return ["Sumua","🌫️","fog"];
+
+  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82))
+    return ["Sade","🌧️","rain"];
+
+  if (code >= 71 && code <= 77)
+    return ["Lunta","🌨️","snow"];
+
+  if (code >= 95)
+    return ["Ukkosta","⛈️","thunder"];
+
+  return ["Ei tietoa","❓","cloudy"];
+}
+
 function updateWeather() {
   fetch(apiUrl)
-    .then(resp => resp.json())
+    .then(r => r.json())
     .then(data => {
-      const w = data.current_weather;
-      const tempElem = document.getElementById("temp");
-      const descElem = document.getElementById("desc");
-      const timeElem = document.getElementById("time");
-      const iconElem = document.getElementById("icon");
 
-      // Lämpötila
-      tempElem.textContent = `${w.temperature.toFixed(1)} °C`;
+      // ===== NYKYINEN SÄÄ =====
+      const current = data.current_weather;
+      const todayInfo = getWeatherInfo(current.weathercode);
 
-      // Sääkuvaus ja ikoni
-      let desc = "Ei tietoa";
-      let icon = "❓";
+      document.getElementById("icon0").textContent = todayInfo[1];
+      document.getElementById("temp0").textContent =
+        current.temperature.toFixed(1) + " °C";
+      document.getElementById("desc0").textContent = todayInfo[0];
 
-      const code = w.weathercode;
-      if (code === 0) { desc = "Selkeää"; icon = "☀️"; }
-      if (code >= 1 && code <= 3) { desc = "Pilvistä"; icon = "⛅"; }
-      if (code >= 45 && code <= 48) { desc = "Sumua"; icon = "🌫️"; }
-      if (code >= 51 && code <= 57) { desc = "Heikkoa sadetta"; icon = "🌦️"; }
-      if (code >= 61 && code <= 67) { desc = "Sade"; icon = "🌧️"; }
-      if (code >= 71 && code <= 77) { desc = "Lumikuuroja"; icon = "🌨️"; }
-      if (code >= 80 && code <= 82) { desc = "Sadekuuroja"; icon = "🌧️"; }
-      if (code >= 95) { desc = "Ukkosta"; icon = "⛈️"; }
+      // Taustan vaihto (perustuu nykyiseen säähän)
+      document.body.className = "";
+      document.body.classList.add(todayInfo[2]);
 
-      descElem.textContent = desc;
-      iconElem.textContent = icon;
-      timeElem.textContent = `Päivitetty: ${w.time.replace("T", " ")}`;
+      // ===== ENNUSTE (2 seuraavaa päivää) =====
+      for (let i = 1; i <= 2; i++) {
+
+        const code = data.daily.weathercode[i];
+        const max = data.daily.temperature_2m_max[i];
+        const min = data.daily.temperature_2m_min[i];
+
+        const info = getWeatherInfo(code);
+
+        document.getElementById("icon"+i).textContent = info[1];
+        document.getElementById("temp"+i).textContent =
+          max.toFixed(0) + "° / " + min.toFixed(0) + "°";
+        document.getElementById("desc"+i).textContent = info[0];
+      }
+
+      document.getElementById("time").textContent =
+        "Päivitetty: " + current.time.replace("T"," ");
+
     })
     .catch(err => {
-      document.getElementById("desc").textContent = "Virhe haettaessa säätä";
-      console.error(err);
+      console.error("Virhe haettaessa säätietoja:", err);
     });
 }
 
-// Alusta
 updateWeather();
-
-// Automaattinen päivitys 5 minuutin välein
-setInterval(updateWeather, 300000); // 300000 ms = 5 min
+setInterval(updateWeather, 300000); // Päivitys 5 min välein
 </script>
 
 </body>
